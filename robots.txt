@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mailtomindempireofficial-a11y.github.io/shopgenius-store/sitemap.xml
