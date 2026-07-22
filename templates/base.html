@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ store_name }}{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{{ store_tagline }}{% endblock %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="/" class="logo">🧠 <span>{{ store_name }}</span></a>
+            <div class="nav-links">
+                <a href="/products">All Products</a>
+                <a href="/trending">🔥 Trending</a>
+                <a href="/deals">💰 Deals</a>
+                <a href="/admin">Admin</a>
+            </div>
+            <form class="search-form" action="/search" method="get">
+                <input type="text" name="q" placeholder="Search products..." value="{{ request.args.get('q', '') }}">
+                <button type="submit">🔍</button>
+            </form>
+        </div>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-messages">
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <main>{% block content %}{% endblock %}</main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h3>🧠 {{ store_name }}</h3>
+                    <p>{{ store_tagline }}</p>
+                </div>
+                <div>
+                    <h4>Quick Links</h4>
+                    <a href="/products">All Products</a>
+                    <a href="/trending">Trending</a>
+                    <a href="/deals">Best Deals</a>
+                </div>
+                <div>
+                    <h4>Categories</h4>
+                    {% for cat in categories %}
+                    <a href="/category/{{ cat.slug }}">{{ cat.icon }} {{ cat.name }}</a>
+                    {% endfor %}
+                </div>
+                <div>
+                    <h4>Legal</h4>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Affiliate Disclosure</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; {{ now.year }} {{ store_name }}. As an Amazon Associate, we earn from qualifying purchases.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} - {{ store_name }}{% endblock %}
+{% block meta_description %}{{ product.meta_description or product.short_description }}{% endblock %}
+
+{% block content %}
+<section class="section product-detail-section">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="/">Home</a> /
+            <a href="/category/{{ product.category }}">{{ product.category }}</a> /
+            <span>{{ product.name }}</span>
+        </div>
+
+        <div class="product-detail">
+            <div class="product-detail-image">
+                {% if product.image_url %}
+                <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                {% else %}
+                <div class="product-image-placeholder large">📦</div>
+                {% endif %}
+                {% if product.badge %}
+                <span class="product-badge large">{{ product.badge }}</span>
+                {% endif %}
+            </div>
+
+            <div class="product-detail-info">
+                <h1>{{ product.name }}</h1>
+
+                <div class="product-rating-large">
+                    <span class="stars">{{ '★' * (product.rating|int) }}{{ '☆' * (5 - product.rating|int) }}</span>
+                    <span class="rating-number">{{ product.rating }}</span>
+                    <span class="review-count">{{ "{:,}".format(product.reviews_count) }} reviews</span>
+                </div>
+
+                <div class="product-pricing-large">
+                    <span class="current-price">${{ "%.2f"|format(product.price) }}</span>
+                    {% if product.old_price %}
+                    <span class="old-price">${{ "%.2f"|format(product.old_price) }}</span>
+                    <span class="savings">Save ${{ "%.2f"|format(product.old_price - product.price) }} ({{ product.discount_percent() }}% off)</span>
+                    {% endif %}
+                </div>
+
+                {% if product.short_description %}
+                <p class="product-short-desc">{{ product.short_description }}</p>
+                {% endif %}
+
+                <div class="product-badges-row">
+                    <span class="badge-item">✅ Fast Shipping</span>
+                    <span class="badge-item">🛡️ Secure Checkout</span>
+                    <span class="badge-item">↩️ Easy Returns</span>
+                </div>
+
+                <a href="/buy/{{ product.id }}" class="btn btn-buy-large">
+                    Buy on Amazon →
+                </a>
+
+                <p class="affiliate-note">You'll be redirected to Amazon to complete your purchase.</p>
+
+                {% if product.description %}
+                <div class="product-description">
+                    <h2>About this item</h2>
+                    <p>{{ product.description }}</p>
+                </div>
+                {% endif %}
+
+                {% if product.tags %}
+                <div class="product-tags">
+                    {% for tag in product.tags.split(',') %}
+                    <span class="tag">{{ tag.strip() }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if related %}
+        <div class="related-products">
+            <h2>You might also like</h2>
+            <div class="products-grid">
+                {% for product in related %}
+                {% include '_product_card.html' %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "{{ product.name }}",
+    "description": "{{ product.description }}",
+    "image": "{{ product.image_url }}",
+    "offers": {
+        "@type": "Offer",
+        "price": "{{ product.price }}",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+    },
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "{{ product.rating }}",
+        "reviewCount": "{{ product.reviews_count }}"
+    }
+}
+</script>
+{% endblock %}

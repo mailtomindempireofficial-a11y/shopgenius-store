@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Products - {{ store_name }}{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="products-header">
+            <h1>{% if current_category == 'trending' %}🔥 Trending Products{% elif current_category == 'deals' %}💰 Best Deals{% elif search_query %}Search: "{{ search_query }}"{% else %}All Products{% endif %}</h1>
+            <div class="products-filters">
+                <a href="/products?sort=newest" class="filter-btn {% if current_sort=='newest' %}active{% endif %}">Newest</a>
+                <a href="/products?sort=price_low" class="filter-btn {% if current_sort=='price_low' %}active{% endif %}">Price Low</a>
+                <a href="/products?sort=price_high" class="filter-btn {% if current_sort=='price_high' %}active{% endif %}">Price High</a>
+                <a href="/products?sort=popular" class="filter-btn {% if current_sort=='popular' %}active{% endif %}">Popular</a>
+                <a href="/products?sort=rating" class="filter-btn {% if current_sort=='rating' %}active{% endif %}">Rating</a>
+            </div>
+        </div>
+        <div class="products-grid">
+            {% for product in products %}
+            {% include '_product_card.html' %}
+            {% endfor %}
+        </div>
+        {% if not products %}
+        <div class="empty-state">
+            <p>No products found. Try a different search or category.</p>
+            <a href="/products" class="btn btn-primary">Browse All</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

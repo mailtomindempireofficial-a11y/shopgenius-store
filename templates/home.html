@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}{{ store_name }} - {{ store_tagline }}{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Discover Products That <span class="gradient">Change Your Life</span></h1>
+            <p>{{ store_tagline }}. Curated by AI, loved by thousands.</p>
+            <div class="hero-actions">
+                <a href="/products" class="btn btn-primary btn-lg">Shop Now</a>
+                <a href="/trending" class="btn btn-outline btn-lg">🔥 Trending</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat"><span class="stat-number">{{ products|length if products else '50+' }}</span><span class="stat-label">Products</span></div>
+                <div class="stat"><span class="stat-number">50K+</span><span class="stat-label">Happy Customers</span></div>
+                <div class="stat"><span class="stat-number">4.7★</span><span class="stat-label">Avg Rating</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if featured %}
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2>⭐ Featured Products</h2>
+            <a href="/products" class="view-all">View All →</a>
+        </div>
+        <div class="products-grid">
+            {% for product in featured %}
+            {% include '_product_card.html' %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if trending %}
+<section class="section section-alt">
+    <div class="container">
+        <div class="section-header">
+            <h2>🔥 Trending Now</h2>
+            <a href="/trending" class="view-all">View All →</a>
+        </div>
+        <div class="products-grid">
+            {% for product in trending %}
+            {% include '_product_card.html' %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="section cta-section">
+    <div class="container">
+        <div class="cta-box">
+            <h2>Never Miss a Deal</h2>
+            <p>We find the best products so you don't have to.</p>
+            <a href="/products" class="btn btn-primary btn-lg">Browse All Products</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
